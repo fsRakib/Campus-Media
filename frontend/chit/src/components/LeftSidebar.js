@@ -5,6 +5,7 @@ import { MdOutlineNotificationsActive } from "react-icons/md";
 import { GrUserManager } from "react-icons/gr";
 import { FaBookBookmark } from "react-icons/fa6";
 import { TbLogout2 } from "react-icons/tb";
+import { Link } from "react-router-dom";
 
 const LeftSidebar = () => {
   return (
@@ -19,12 +20,12 @@ const LeftSidebar = () => {
           />
         </div>
         <div className="my-4">
-          <div className="flex items-center my-2 px-4 py-2 hover:bg-gray-200 hover:cursor-pointer rounded-full">
+          <Link to="/" className="flex items-center my-2 px-4 py-2 hover:bg-gray-200 hover:cursor-pointer rounded-full">
             <div>
               <TbBrandGoogleHome size="24px" />
             </div>
             <h1 className="font-bold text-lg ml-2">Home</h1>
-          </div>
+          </Link>
           <div className="flex items-center my-2 px-4 py-2 hover:bg-gray-200 hover:cursor-pointer rounded-full">
             <div>
               <SiHashicorp size="24px" />
@@ -37,12 +38,12 @@ const LeftSidebar = () => {
             </div>
             <h1 className="font-bold text-lg ml-2">Notifications</h1>
           </div>
-          <div className="flex items-center my-2 px-4 py-2 hover:bg-gray-200 hover:cursor-pointer rounded-full">
+          <Link to="/profile" className="flex items-center my-2 px-4 py-2 hover:bg-gray-200 hover:cursor-pointer rounded-full">
             <div>
               <GrUserManager size="24px" />
             </div>
             <h1 className="font-bold text-lg ml-2">Profile</h1>
-          </div>
+          </Link>
           <div className="flex items-center my-2 px-4 py-2 hover:bg-gray-200 hover:cursor-pointer rounded-full">
             <div>
               <FaBookBookmark size="24px" />
