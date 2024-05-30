@@ -148,3 +148,51 @@ export const getOtherUsers = async (req, res) => {
     console.log(error);
   }
 };
+
+export const follow = async (req, res) => {
+  try {
+    const loggedInUserId = req.body.id;
+    const otherUserId = req.params.id;
+    const loggedInUser = await User.findById(loggedInUserId);
+    const otherUser = await User.findById(otherUserId);
+
+    if (!otherUser.followers.includes(loggedInUserId)) {
+      await otherUser.updateOne({ $push: { followers: loggedInUserId } });
+      await loggedInUser.updateOne({ $push: { following: otherUserId } });
+    } else {
+      return res.status(401).json({
+        msg: `User already following to ${otherUser.name}`,
+      });
+    }
+    return res.status(200).json({
+      msg: `${loggedInUser.name} just follow to ${otherUser.name}`,
+      success: true,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const unfollow = async (req, res) => {
+  try {
+    const loggedInUserId = req.body.id;
+    const otherUserId = req.params.id;
+    const loggedInUser = await User.findById(loggedInUserId);
+    const otherUser = await User.findById(otherUserId);
+
+    if (loggedInUser.following.includes(otherUserId)) {
+      await otherUser.updateOne({ $pull: { followers: loggedInUserId } });
+      await loggedInUser.updateOne({ $pull: { following: otherUserId } });
+    } else {
+      return res.status(400).json({
+        msg: "User has not followd yet",
+      });
+    }
+    return res.status(200).json({
+      msg: `${loggedInUser.name} unfollow to ${otherUser.name}`,
+      success: true,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
