@@ -2,8 +2,13 @@ import React from "react";
 import { TiArrowBackOutline } from "react-icons/ti";
 import { Link } from "react-router-dom";
 import Avatar from "react-avatar";
+import { useSelector } from "react-redux";
+import useGetProfile from "../hooks/useGetProfile";
 
 export const Profile = () => {
+  const { user, profile } = useSelector((store) => store.user);
+  useGetProfile(user?._id);
+
   return (
     <div className="w-[50%] border-l border-r border-gray-200">
       <div>
@@ -15,7 +20,7 @@ export const Profile = () => {
             <TiArrowBackOutline size="24px" />
           </Link>
           <div>
-            <h1 className="font-bold text-lg">FS Rakib </h1>
+            <h1 className="font-bold text-lg">{profile?.name} </h1>
             <p className="text-gray-500 text-sm">10 post</p>
           </div>
         </div>
@@ -32,14 +37,19 @@ export const Profile = () => {
           />
         </div>
         <div className="text-right m-4">
-            <button className="px-4 py-1 hover:bg-gray-200 rounded-full border border-gray-400">Edit Profile</button>
+          <button className="px-4 py-1 hover:bg-gray-200 rounded-full border border-gray-400">
+            Edit Profile
+          </button>
         </div>
         <div className="m-4">
-            <h1 className="font-bold text-xl">FS Rakib</h1>
-            <p>@fsRakib</p>
+          <h1 className="font-bold text-xl">{profile?.name}</h1>
+          <p>{`@${profile?.username}`}</p>
         </div>
         <div className="m-4 text-sm">
-            <p>Hi everyone. I am rakib. I like to hear music, watching movies and hiking with friends.</p>
+          <p>
+            Hi everyone. I am rakib. I like to hear music, watching movies and
+            hiking with friends.
+          </p>
         </div>
       </div>
     </div>
