@@ -6,8 +6,10 @@ import { GrUserManager } from "react-icons/gr";
 import { FaBookBookmark } from "react-icons/fa6";
 import { TbLogout2 } from "react-icons/tb";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const LeftSidebar = () => {
+  const { user } = useSelector((store) => store.user);
   return (
     <div className="w-[20%]">
       <div>
@@ -20,7 +22,10 @@ const LeftSidebar = () => {
           />
         </div>
         <div className="my-4">
-          <Link to="/" className="flex items-center my-2 px-4 py-2 hover:bg-gray-200 hover:cursor-pointer rounded-full">
+          <Link
+            to="/"
+            className="flex items-center my-2 px-4 py-2 hover:bg-gray-200 hover:cursor-pointer rounded-full"
+          >
             <div>
               <TbBrandGoogleHome size="24px" />
             </div>
@@ -38,7 +43,10 @@ const LeftSidebar = () => {
             </div>
             <h1 className="font-bold text-lg ml-2">Notifications</h1>
           </div>
-          <Link to="/profile" className="flex items-center my-2 px-4 py-2 hover:bg-gray-200 hover:cursor-pointer rounded-full">
+          <Link
+            to={`/profile/${user?._id}`}
+            className="flex items-center my-2 px-4 py-2 hover:bg-gray-200 hover:cursor-pointer rounded-full"
+          >
             <div>
               <GrUserManager size="24px" />
             </div>
@@ -57,8 +65,8 @@ const LeftSidebar = () => {
             <h1 className="font-bold text-lg ml-2">Logout</h1>
           </div>
           <button className="px-4 py-2 border-none text-md bg-[#39ff14] w-full rounded-full text-black font-bold">
-          Post
-        </button>
+            Post
+          </button>
         </div>
       </div>
     </div>

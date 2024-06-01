@@ -4,11 +4,14 @@ import RightSidebar from "./RightSidebar";
 import { Outlet } from "react-router-dom";
 import { useSelector } from "react-redux";
 import useOtherUser from "../hooks/useOtherUsers";
+import useGetMyChit from "../hooks/useGetMyChit";
 
 const Home = () => {
-  //custom Hook
   const { user, otherUsers } = useSelector((store) => store.user);
+
+  //custom Hook
   useOtherUser(user?._id);
+  useGetMyChit(user?._id);
 
   return (
     <div className="flex justify-between w-[80%] mx-auto">

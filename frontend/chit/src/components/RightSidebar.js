@@ -1,6 +1,7 @@
 import React from "react";
 import { FaSearch } from "react-icons/fa";
 import Avatar from "react-avatar";
+import { Link } from "react-router-dom";
 
 const RightSidebar = ({ otherUsers }) => {
   return (
@@ -32,9 +33,11 @@ const RightSidebar = ({ otherUsers }) => {
                 </div>
               </div>
               <div>
-                <button className="px-4 py-1 bg-black text-white rounded-full">
-                  Profile
-                </button>
+                <Link to={`/profile/${user?._id}`}>
+                  <button className="px-4 py-1 bg-black text-white rounded-full">
+                    Profile
+                  </button>
+                </Link>
               </div>
             </div>
           );

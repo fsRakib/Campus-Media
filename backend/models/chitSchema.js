@@ -6,7 +6,7 @@ const chitSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    
+
     like: {
       type: Array,
       default: [],
@@ -15,6 +15,10 @@ const chitSchema = new mongoose.Schema(
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
+    },
+    userDetails: {
+      type: Array,
+      default: [],
     },
   },
   {

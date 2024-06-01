@@ -1,8 +1,37 @@
-import React from "react";
+import React, { useState } from "react";
 import Avatar from "react-avatar";
 import { FaImages } from "react-icons/fa6";
+import axios from "axios";
+import { CHIT_API_END_POINT } from "../utils/constant";
+import toast from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
+import store from "../redux/store";
+import { getRefresh } from "../redux/chitSlice";
 
 export const CreatePost = () => {
+  const [description, setDescription] = useState("");
+  const { user } = useSelector((store) => store.user);
+  const dispatch = useDispatch();
+
+  const submitHandler = async () => {
+    try {
+      const res = await axios.post(
+        `${CHIT_API_END_POINT}/create`,
+        { description, id: user?._id },
+        {
+          withCredentials: true,
+        }
+      );
+      dispatch(getRefresh());
+      if (res.data.success) {
+        toast.success(res.data.msg);
+      }
+    } catch (error) {
+      toast.error(error.response.data.msg);
+      console.log(error);
+    }
+    setDescription("");
+  };
   return (
     <div className="w-[100%]">
       <div>
@@ -14,7 +43,7 @@ export const CreatePost = () => {
             <h1 className="font-semibold text-gray-600 text-lg">Following</h1>
           </div>
         </div>
-        <div >
+        <div>
           <div className="flex items-center p-4">
             <div>
               <Avatar
@@ -24,6 +53,8 @@ export const CreatePost = () => {
               />
             </div>
             <input
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
               className="w-full outline-none ml-2 border-none text-xl"
               type="text"
               placeholder="Whats going !..."
@@ -31,9 +62,14 @@ export const CreatePost = () => {
           </div>
           <div className="flex items-center justify-between p-4 border-b border-gray-300">
             <div>
-                <FaImages size="24px"/>
+              <FaImages size="24px" />
             </div>
-            <button className="bg-[#39ff14] px-4 py-1 text-lg text-black border-none rounded-full">Post</button>
+            <button
+              onClick={submitHandler}
+              className="bg-[#39ff14] px-4 py-1 text-lg text-black border-none rounded-full"
+            >
+              Post
+            </button>
           </div>
         </div>
       </div>
