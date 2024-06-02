@@ -9,6 +9,7 @@ import { CHIT_API_END_POINT } from "../utils/constant";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import { getRefresh } from "../redux/chitSlice";
+import { timeSince } from "../utils/constant";
 
 export const Chit = ({ chit }) => {
   const { user } = useSelector((store) => store.user);
@@ -56,7 +57,9 @@ export const Chit = ({ chit }) => {
             <div className="flex items-center ">
               <h1 className="font-bold">{chit?.userDetails[0]?.name}</h1>
               <p className="text-gray-500 text-sm ml-1">
-                {`@${chit?.userDetails[0]?.username}`} . 1m
+                {`@${chit?.userDetails[0]?.username} . ${timeSince(
+                  chit?.createdAt
+                )}`}
               </p>
             </div>
             <div>

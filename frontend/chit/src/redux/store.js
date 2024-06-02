@@ -3,7 +3,6 @@ import userSlice from "./userSlice";
 import chitSlice from "./chitSlice";
 
 import {
-  persistStore,
   persistReducer,
   FLUSH,
   REHYDRATE,
