@@ -19,6 +19,9 @@ export const CreatePost = () => {
         `${CHIT_API_END_POINT}/create`,
         { description, id: user?._id },
         {
+          headers: {
+            "Content-Type": "application/json",
+          },
           withCredentials: true,
         }
       );
@@ -53,9 +56,13 @@ export const CreatePost = () => {
                 : "border-b-4 border-transparent"
             } cursor-pointer hover:bg-gray-200 w-full text-center px-4 py-3`}
           >
-            <h1 className={`${
-              isActive ? "font-bold" : "font-normal"
-            } text-gray-600 text-lg`}>For you</h1>
+            <h1
+              className={`${
+                isActive ? "font-bold" : "font-normal"
+              } text-gray-600 text-lg`}
+            >
+              For you
+            </h1>
           </div>
           <div
             onClick={followingHandler}
@@ -65,9 +72,13 @@ export const CreatePost = () => {
                 : "border-b-4 border-transparent"
             } cursor-pointer hover:bg-gray-200 w-full text-center px-4 py-3`}
           >
-            <h1 className={`${
-              !isActive ? "font-bold" : "font-normal"
-            } text-gray-600 text-lg`}>Following</h1>
+            <h1
+              className={`${
+                !isActive ? "font-bold" : "font-normal"
+              } text-gray-600 text-lg`}
+            >
+              Following
+            </h1>
           </div>
         </div>
         <div>
