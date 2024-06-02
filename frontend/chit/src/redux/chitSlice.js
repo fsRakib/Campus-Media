@@ -4,6 +4,7 @@ const chitSlice = createSlice({
   initialState: {
     chits: null,
     refresh: false,
+    isActive: true,
   },
   reducers: {
     getAllChits: (state, action) => {
@@ -12,7 +13,10 @@ const chitSlice = createSlice({
     getRefresh: (state) => {
       state.refresh = !state.refresh;
     },
+    getIsActive: (state, action) => {
+      state.isActive = action.payload;
+    },
   },
 });
-export const { getAllChits, getRefresh } = chitSlice.actions;
+export const { getAllChits, getRefresh, getIsActive } = chitSlice.actions;
 export default chitSlice.reducer;

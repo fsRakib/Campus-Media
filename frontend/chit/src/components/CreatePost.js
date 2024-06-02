@@ -5,12 +5,12 @@ import axios from "axios";
 import { CHIT_API_END_POINT } from "../utils/constant";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import store from "../redux/store";
-import { getRefresh } from "../redux/chitSlice";
+import { getIsActive, getRefresh } from "../redux/chitSlice";
 
 export const CreatePost = () => {
   const [description, setDescription] = useState("");
   const { user } = useSelector((store) => store.user);
+  const { isActive } = useSelector((store) => store.chit);
   const dispatch = useDispatch();
 
   const submitHandler = async () => {
@@ -32,15 +32,42 @@ export const CreatePost = () => {
     }
     setDescription("");
   };
+
+  const forYouHandler = () => {
+    dispatch(getIsActive(true));
+  };
+
+  const followingHandler = () => {
+    dispatch(getIsActive(false));
+  };
+
   return (
     <div className="w-[100%]">
       <div>
         <div className="flex items-center justify-evenly border-b border-gray-200">
-          <div className="cursor-pointer hover:bg-gray-200 w-full text-center px-4 py-3">
-            <h1 className="font-semibold text-gray-600 text-lg">For you</h1>
+          <div
+            onClick={forYouHandler}
+            className={`${
+              isActive
+                ? "border-b-4 border-[#39ff14]"
+                : "border-b-4 border-transparent"
+            } cursor-pointer hover:bg-gray-200 w-full text-center px-4 py-3`}
+          >
+            <h1 className={`${
+              isActive ? "font-bold" : "font-normal"
+            } text-gray-600 text-lg`}>For you</h1>
           </div>
-          <div className="cursor-pointer hover:bg-gray-200 w-full text-center px-4 py-3">
-            <h1 className="font-semibold text-gray-600 text-lg">Following</h1>
+          <div
+            onClick={followingHandler}
+            className={`${
+              !isActive
+                ? "border-b-4 border-[#39ff14]"
+                : "border-b-4 border-transparent"
+            } cursor-pointer hover:bg-gray-200 w-full text-center px-4 py-3`}
+          >
+            <h1 className={`${
+              !isActive ? "font-bold" : "font-normal"
+            } text-gray-600 text-lg`}>Following</h1>
           </div>
         </div>
         <div>

@@ -2,13 +2,54 @@ import React from "react";
 import { TiArrowBackOutline } from "react-icons/ti";
 import { Link, useParams } from "react-router-dom";
 import Avatar from "react-avatar";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import useGetProfile from "../hooks/useGetProfile";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { USER_API_END_POINT } from "../utils/constant";
+import { followingUpdate } from "../redux/userSlice";
+import { getRefresh } from "../redux/chitSlice";
 
 export const Profile = () => {
   const { user, profile } = useSelector((store) => store.user);
   const { id } = useParams();
   useGetProfile(id);
+  const dispatch = useDispatch();
+
+  const followAndUnfollowHandler = async () => {
+    if (user.following.includes(id)) {
+      //unfollow
+
+      try {
+        axios.defaults.withCredentials = true;
+        const res = await axios.post(`${USER_API_END_POINT}/unfollow/${id}`, {
+          id: user?._id,
+        });
+        console.log(res);
+        dispatch(followingUpdate(id));
+        // dispatch(getRefresh());
+        toast.success(res.data.msg);
+      } catch (error) {
+        toast.error(error.response.data.msg);
+        console.log(error);
+      }
+    } else {
+      //follow
+      try {
+        axios.defaults.withCredentials = true;
+        const res = await axios.post(`${USER_API_END_POINT}/follow/${id}`, {
+          id: user?._id,
+        });
+        console.log(res);
+        dispatch(followingUpdate(id));
+        // dispatch(getRefresh());
+        toast.success(res.data.msg);
+      } catch (error) {
+        toast.error(error.response.data.msg);
+        console.log(error);
+      }
+    }
+  };
 
   return (
     <div className="w-[50%] border-l border-r border-gray-200">
@@ -38,9 +79,18 @@ export const Profile = () => {
           />
         </div>
         <div className="text-right m-4">
-          <button className="px-4 py-1 hover:bg-gray-200 rounded-full border border-gray-400">
-            Edit Profile
-          </button>
+          {profile?._id === user?._id ? (
+            <button className="px-4 py-1 hover:bg-gray-200 rounded-full border border-gray-400">
+              Edit Profile
+            </button>
+          ) : (
+            <button
+              onClick={followAndUnfollowHandler}
+              className="px-4 py-1 bg-black text-white rounded-full "
+            >
+              {user.following.includes(id) ? "Following" : "Follow"}
+            </button>
+          )}
         </div>
         <div className="m-4">
           <h1 className="font-bold text-xl">{profile?.name}</h1>
