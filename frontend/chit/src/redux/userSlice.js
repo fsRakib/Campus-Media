@@ -25,6 +25,9 @@ const userSlice = createSlice({
     updateProfile: (state, action) => {
       state.profile = action.payload;
     },
+    updateBio: (state, action) => {
+      state.user.bio = action.payload;
+    },
 
     followingUpdate: (state, action) => {
       //unfollow
@@ -47,5 +50,6 @@ export const {
   followingUpdate,
   updateUser,
   updateProfile,
+  updateBio,
 } = userSlice.actions;
 export default userSlice.reducer;

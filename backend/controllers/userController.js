@@ -228,3 +228,29 @@ export const unfollow = async (req, res) => {
     console.log(error);
   }
 };
+
+//============================================================
+export const updateUserBio = async (req, res) => {
+  try {
+    const { bio } = req.body;
+    const userId = req.user; // Extracted from the JWT token
+
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { bio },
+      { new: true }
+    ).select("-password");
+
+    return res.status(200).json({
+      msg: "Bio updated successfully",
+      success: true,
+      user,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      msg: "Something went wrong",
+      success: false,
+    });
+  }
+};

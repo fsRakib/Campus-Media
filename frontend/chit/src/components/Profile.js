@@ -12,6 +12,8 @@ import { getRefresh } from "../redux/chitSlice";
 
 export const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
+  const [isEditingBio, setIsEditingBio] = useState(false);
+
   const { user, profile } = useSelector((store) => store.user);
   const { id } = useParams();
   useGetProfile(id);
@@ -82,6 +84,29 @@ export const Profile = () => {
     }
   };
 
+  const [newBio, setNewBio] = useState(profile?.bio || "");
+
+  useEffect(() => {
+    if (profile) {
+      setNewBio(profile.bio);
+    }
+  }, [profile]);
+
+  const updateBioHandler = async () => {
+    try {
+      const res = await axios.put(`${USER_API_END_POINT}/updateBio`, {
+        bio: newBio,
+      });
+
+      toast.success(res.data.msg);
+      dispatch(updateProfile({ ...profile, bio: newBio }));
+      setIsEditingBio(false); // Hide the textarea after saving the bio
+    } catch (error) {
+      toast.error(error.response.data.msg);
+      console.log(error);
+    }
+  };
+
   return (
     <div className="w-[50%] border-l border-r border-gray-200">
       <div>
@@ -131,11 +156,36 @@ export const Profile = () => {
           <p>{`@${profile?.username}`}</p>
         </div>
         <div className="m-4 text-sm">
-          <p>
-            Hi everyone. I am rakib. I like to hear music, watching movies and
-            hiking with friends.
-          </p>
+          <p>{profile?.bio || "Add bio .."}</p>
         </div>
+
+        {profile?._id === user?._id && (
+          <div className="m-4">
+            <button
+              onClick={() => setIsEditingBio(true)}
+              className="bg-[#39ff14] px-4 py-2  text-black rounded-full hover:bg-blue-600 transition duration-300"
+            >
+              Update Bio
+            </button>
+            {isEditingBio && (
+              <div className="mt-4">
+                <textarea
+                  value={newBio}
+                  onChange={(e) => setNewBio(e.target.value)}
+                  className="w-full p-2 border border-gray-300 rounded"
+                  rows="4"
+                  placeholder="Enter your bio"
+                />
+                <button
+                  onClick={updateBioHandler}
+                  className="mt-2 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition duration-300"
+                >
+                  Save Bio
+                </button>
+              </div>
+            )}
+          </div>
+        )}
 
         {isEditing && (
           <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">

@@ -9,6 +9,7 @@ import {
   logout,
   unfollow,
   updateProfile,
+  updateUserBio,
 } from "../controllers/userController.js";
 import isAuthenticated from "../config/auth.js";
 const router = express.Router();
@@ -22,5 +23,6 @@ router.route("/otheruser/:id").get(isAuthenticated, getOtherUsers);
 router.route("/follow/:id").post(isAuthenticated, follow);
 router.route("/unfollow/:id").post(isAuthenticated, unfollow);
 router.route("/updateProfile/:id").put(isAuthenticated, updateProfile);
+router.route("/updateBio").put(isAuthenticated, updateUserBio);
 
 export default router;
