@@ -51,12 +51,15 @@ const LeftSidebar = () => {
             </div>
             <h1 className="font-bold text-lg ml-2">Home</h1>
           </Link>
-          <div className="flex items-center my-2 px-4 py-2 hover:bg-gray-200 hover:cursor-pointer rounded-full">
+          <Link
+            to={`/explore/${user?._id}`}
+            className="flex items-center my-2 px-4 py-2 hover:bg-gray-200 hover:cursor-pointer rounded-full"
+          >
             <div>
               <SiHashicorp size="24px" />
             </div>
             <h1 className="font-bold text-lg ml-2">Explore</h1>
-          </div>
+          </Link>
           <div className="flex items-center my-2 px-4 py-2 hover:bg-gray-200 hover:cursor-pointer rounded-full">
             <div>
               <MdOutlineNotificationsActive size="25px" />

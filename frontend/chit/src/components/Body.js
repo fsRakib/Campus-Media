@@ -4,6 +4,7 @@ import { Login } from "./Login";
 import Home from "./Home";
 import Feed from "./Feed";
 import { Profile } from "./Profile";
+import Explore from "./Explore";
 
 export const Body = () => {
   const appRouter = createBrowserRouter([
@@ -18,6 +19,10 @@ export const Body = () => {
         {
           path: "/profile/:id",
           element: <Profile />,
+        },
+        {
+          path: "/explore/:id",
+          element: <Explore />,
         },
       ],
     },
