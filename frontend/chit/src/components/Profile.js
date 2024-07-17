@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { TiArrowBackOutline } from "react-icons/ti";
 import { Link, useParams } from "react-router-dom";
 import Avatar from "react-avatar";
@@ -7,10 +7,11 @@ import useGetProfile from "../hooks/useGetProfile";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { USER_API_END_POINT } from "../utils/constant";
-import { followingUpdate } from "../redux/userSlice";
+import { followingUpdate, updateUser, updateProfile } from "../redux/userSlice";
 import { getRefresh } from "../redux/chitSlice";
 
 export const Profile = () => {
+  const [isEditing, setIsEditing] = useState(false);
   const { user, profile } = useSelector((store) => store.user);
   const { id } = useParams();
   useGetProfile(id);
@@ -51,6 +52,36 @@ export const Profile = () => {
     }
   };
 
+  // Handlers for updating name and username
+  const [newName, setNewName] = useState(profile?.name || "");
+  const [newUsername, setNewUsername] = useState(profile?.username || "");
+
+  useEffect(() => {
+    if (profile) {
+      setNewName(profile.name);
+      setNewUsername(profile.username);
+    }
+  }, [profile]);
+
+  axios.defaults.withCredentials = true;
+
+  const updateProfileHandler = async () => {
+    try {
+      const res = await axios.put(
+        `${USER_API_END_POINT}/updateProfile/${user._id}`,
+        { name: newName, username: newUsername }
+      );
+
+      toast.success(res.data.msg);
+      dispatch(updateUser(res.data.user));
+      dispatch(updateProfile(res.data.user));
+      setIsEditing(false);
+    } catch (error) {
+      toast.error(error.response.data.msg);
+      console.log(error);
+    }
+  };
+
   return (
     <div className="w-[50%] border-l border-r border-gray-200">
       <div>
@@ -80,7 +111,10 @@ export const Profile = () => {
         </div>
         <div className="text-right m-4">
           {profile?._id === user?._id ? (
-            <button className="px-4 py-1 hover:bg-gray-200 rounded-full border border-gray-400">
+            <button
+              onClick={() => setIsEditing(true)}
+              className="px-4 py-1 hover:bg-gray-200 rounded-full border border-gray-400"
+            >
               Edit Profile
             </button>
           ) : (
@@ -102,6 +136,56 @@ export const Profile = () => {
             hiking with friends.
           </p>
         </div>
+
+        {isEditing && (
+          <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+            <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+              <h2 className="text-2xl font-bold mb-4">Edit Profile</h2>
+              <div className="mb-4">
+                <label
+                  htmlFor="name"
+                  className="block text-sm font-medium mb-2"
+                >
+                  Name
+                </label>
+                <input
+                  type="text"
+                  id="name"
+                  value={newName}
+                  onChange={(e) => setNewName(e.target.value)}
+                  className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-300 hover:ring-2 hover:ring-green-500"
+                />
+              </div>
+              <div className="mb-4">
+                <label
+                  htmlFor="username"
+                  className="block text-sm font-medium mb-2"
+                >
+                  Username
+                </label>
+                <input
+                  type="text"
+                  id="username"
+                  value={newUsername}
+                  onChange={(e) => setNewUsername(e.target.value)}
+                  className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-300 hover:ring-2 hover:ring-green-500"
+                />
+              </div>
+              <button
+                onClick={updateProfileHandler}
+                className="w-full bg-green-500 text-white py-2 rounded hover:bg-green-600 transition duration-300"
+              >
+                Save
+              </button>
+              <button
+                onClick={() => setIsEditing(false)}
+                className="w-full mt-4 bg-gray-500 text-white py-2 rounded hover:bg-gray-600 transition duration-300"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

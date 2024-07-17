@@ -32,6 +32,14 @@ const userSchema = new mongoose.Schema(
       type: Array,
       default: [],
     },
+    profilePicture: {
+      type: String,
+      default: "",
+    },
+    bio: {
+      type: String,
+      default: "",
+    },
   },
   {
     timestamps: true,

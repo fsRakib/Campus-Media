@@ -20,6 +20,10 @@ const chitSchema = new mongoose.Schema(
       type: Array,
       default: [],
     },
+    imageUrl: {
+      type: String,
+      default: "",
+    },
   },
   {
     timestamps: true,

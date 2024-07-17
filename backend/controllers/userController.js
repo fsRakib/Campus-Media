@@ -2,6 +2,38 @@ import { User } from "../models/userSchema.js";
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
 
+export const updateProfile = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, username } = req.body;
+
+    if (!name || !username) {
+      return res.status(401).json({
+        msg: "Name and username are required",
+        success: false,
+      });
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+      id,
+      { name, username },
+      { new: true }
+    ).select("-password");
+
+    return res.status(200).json({
+      msg: "Profile updated successfully",
+      user: updatedUser,
+      success: true,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      msg: "Server error",
+      success: false,
+    });
+  }
+};
+//=======================================================
 export const Register = async (req, res) => {
   try {
     const { name, username, email, password } = req.body;

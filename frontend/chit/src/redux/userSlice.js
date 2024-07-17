@@ -18,6 +18,14 @@ const userSlice = createSlice({
     getMyProfile: (state, action) => {
       state.profile = action.payload;
     },
+    //============= new ================
+    updateUser: (state, action) => {
+      state.user = action.payload;
+    },
+    updateProfile: (state, action) => {
+      state.profile = action.payload;
+    },
+
     followingUpdate: (state, action) => {
       //unfollow
       if (state.user.following.includes(action.payload)) {
@@ -32,6 +40,12 @@ const userSlice = createSlice({
   },
 });
 
-export const { getUser, getOtherUsers, getMyProfile, followingUpdate } =
-  userSlice.actions;
+export const {
+  getUser,
+  getOtherUsers,
+  getMyProfile,
+  followingUpdate,
+  updateUser,
+  updateProfile,
+} = userSlice.actions;
 export default userSlice.reducer;
