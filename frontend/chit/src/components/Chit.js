@@ -5,7 +5,7 @@ import { TfiCommentsSmiley } from "react-icons/tfi";
 import { PiHandshakeThin } from "react-icons/pi";
 import { MdOutlineBookmarks } from "react-icons/md";
 import { RiDeleteBin6Line } from "react-icons/ri";
-import { CHIT_API_END_POINT } from "../utils/constant";
+import { CHIT_API_END_POINT, USER_API_END_POINT } from "../utils/constant";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import { getRefresh } from "../redux/chitSlice";
@@ -14,6 +14,7 @@ import { timeSince } from "../utils/constant";
 export const Chit = ({ chit }) => {
   const { user } = useSelector((store) => store.user);
   const dispatch = useDispatch();
+
   const likeOrDislikeHandler = async (id) => {
     try {
       const res = await axios.put(
@@ -40,6 +41,24 @@ export const Chit = ({ chit }) => {
       toast.success(res.data.msg);
     } catch (error) {
       toast.success(error.response.data.msg);
+      console.log(error);
+    }
+  };
+
+
+  const bookmarkHandler = async (id) => {
+    try {
+      const res = await axios.put(
+        `${USER_API_END_POINT}/bookmark/${id}`,
+        { id: user?._id },
+        {
+          withCredentials: true,
+        }
+      );
+      dispatch(getRefresh());
+      toast.success(res.data.msg);
+    } catch (error) {
+      toast.error(error.response.data.msg);
       console.log(error);
     }
   };
@@ -81,11 +100,14 @@ export const Chit = ({ chit }) => {
                 </div>
                 <p>0</p>
               </div>
-              <div className="flex items-center">
+              <div
+                onClick={() => bookmarkHandler(chit?._id)}
+                className="flex items-center"
+              >
                 <div className="p-2 hover:bg-green-200 rounded-full cursor-pointer">
                   <MdOutlineBookmarks size="24px" />
                 </div>
-                <p>0</p>
+                <p>{user?.bookmarks?.length}</p>
               </div>
               {user?._id === chit?.userId && (
                 <div

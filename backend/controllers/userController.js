@@ -119,6 +119,9 @@ export const logout = (req, res) => {
   });
 };
 
+
+// like- userId
+// book- chitId
 export const bookmark = async (req, res) => {
   try {
     const loggedInUserId = req.body.id;
@@ -163,7 +166,7 @@ export const getMyProfile = async (req, res) => {
 
 export const getOtherUsers = async (req, res) => {
   try {
-    const { id } = req.params; //changed body to params
+    const { id } = req.params;
     const otherUsers = await User.find({ _id: { $ne: id } }).select(
       "-password"
     );

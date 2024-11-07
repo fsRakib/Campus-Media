@@ -75,12 +75,15 @@ const LeftSidebar = () => {
             </div>
             <h1 className="font-bold text-lg ml-2">Profile</h1>
           </Link>
-          <div className="flex items-center my-2 px-4 py-2 hover:bg-gray-200 hover:cursor-pointer rounded-full">
+          <Link
+            to={`/bookmarks/${user?._id}`}
+            className="flex items-center my-2 px-4 py-2 hover:bg-gray-200 hover:cursor-pointer rounded-full"
+          >
             <div>
               <FaBookBookmark size="24px" />
             </div>
             <h1 className="font-bold text-lg ml-2">Bookmarks</h1>
-          </div>
+          </Link>
           <div
             onClick={logoutHandler}
             className="flex items-center my-2 px-4 py-2 hover:bg-gray-200 hover:cursor-pointer rounded-full"

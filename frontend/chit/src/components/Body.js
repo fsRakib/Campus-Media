@@ -5,6 +5,7 @@ import Home from "./Home";
 import Feed from "./Feed";
 import { Profile } from "./Profile";
 import Explore from "./Explore";
+import Bookmarks from "./Bookmarks";
 
 export const Body = () => {
   const appRouter = createBrowserRouter([
@@ -23,6 +24,10 @@ export const Body = () => {
         {
           path: "/explore/:id",
           element: <Explore />,
+        },
+        {
+          path: "/bookmarks/:id",
+          element: <Bookmarks />,
         },
       ],
     },
