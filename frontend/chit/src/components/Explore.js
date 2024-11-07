@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import HashLoader from "react-spinners/HashLoader";
+import { CHIT_API_END_POINT } from "../utils/constant";
 
 const Explore = () => {
   const [message, setMessage] = useState("");
@@ -23,7 +24,7 @@ const Explore = () => {
   };
 
   const handleSent = async (prompt) => {
-    setMessage(""); // Clear the input box
+    setMessage(""); 
     setLoading(true);
 
     const userMessage = { type: "user", text: prompt || message };
@@ -48,7 +49,6 @@ const Explore = () => {
       let newResponse2 = newResponse.split("*").join("<br/>");
       let newResponseArray = newResponse2.split("");
 
-      // Add an initial bot message with isTyping set to true
       setChatHistory((prevChatHistory) => {
         const updatedChatHistory = prevChatHistory.slice(0, -1);
         return [
@@ -85,19 +85,19 @@ const Explore = () => {
       });
     } finally {
       setLoading(false);
-      setMessage(""); // Clear the input box
+      setMessage(""); 
     }
   };
 
+  // Updated runChat to call your backend API endpoint
   const runChat = async (input) => {
-    const res = await axios({
-      url: "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyDo-Yq2zkDjvSNZT3x5zuxTQnMIdBsoN40",
-      method: "post",
-      data: {
-        contents: [{ parts: [{ text: input }] }],
-      },
-    });
-    return res.data.candidates[0].content.parts[0].text;
+    try {
+      const res = await axios.post( `${CHIT_API_END_POINT}/chat`, { userInput: input });
+      return res.data;
+    } catch (error) {
+      console.error("Error in runChat:", error);
+      throw new Error("Chat API request failed");
+    }
   };
 
   useEffect(() => {
@@ -118,8 +118,6 @@ const Explore = () => {
         style={{ height: "100vh", paddingRight: "1rem" }}
       >
         <div className="flex-grow mb-4 overflow-y-auto pr-4">
-          {" "}
-          {/* Added padding to the right */}
           {chatHistory.map((chat, index) => (
             <div
               key={index}

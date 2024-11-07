@@ -8,7 +8,7 @@ const API_KEY = process.env.GOOGLE_API_KEY;
 
 async function runChat(userInput) {
   try {
-    console.log("Running chat with input:", userInput);  
+    // console.log("Running chat with input:", userInput);  
     const genAI = new GoogleGenerativeAI(API_KEY);
     const model = genAI.getGenerativeModel({ model: MODEL_NAME });
 
@@ -19,9 +19,9 @@ async function runChat(userInput) {
 
     const chat = model.startChat({ generationConfig });
     const result = await chat.sendMessage(userInput);
-    console.log("Generated Response:", result.response.text()); 
+    // console.log("Generated Response:", result.response.text()); 
 
-    return result.response.text(); // Return the text only
+    return result.response.text(); 
   } catch (error) {
     console.error("Error in runChat:", error);  
     throw new Error("Google Generative AI API error");
@@ -34,15 +34,15 @@ export async function chatHandler(req, res) {
     console.log("Received user input:", userInput); 
 
     if (!userInput) {
-      return res.status(400).send('No input provided'); // Send a plain text error message
+      return res.status(400).send('No input provided'); 
     }
 
     const response = await runChat(userInput);
     console.log("API Response:", response);  
 
-    res.status(200).send(response); // Send the plain text response
+    res.status(200).send(response); 
   } catch (error) {
     console.error('Error in chat endpoint:', error);
-    res.status(500).send('Internal Server Error'); // Send a plain text error message
+    res.status(500).send('Internal Server Error');
   }
 }
