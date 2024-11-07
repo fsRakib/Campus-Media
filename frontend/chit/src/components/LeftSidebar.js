@@ -93,7 +93,7 @@ const LeftSidebar = () => {
             </div>
             <h1 className="font-bold text-lg ml-2">Logout</h1>
           </div>
-          <button className="px-4 py-2 border-none text-md bg-[#39ff14] w-full rounded-full text-black font-bold">
+          <button className="px-4 py-2 tracking-wider text-xl border-2 border-black text-md bg-[#39ff14] w-full rounded-full text-black font-bold">
             Post
           </button>
         </div>

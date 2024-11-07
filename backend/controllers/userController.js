@@ -1,6 +1,62 @@
 import { User } from "../models/userSchema.js";
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
+import cloudinary from "../config/cloudinary.js";
+
+export const uploadProfilePic = async (req, res) => {
+  try {
+    const { id } = req.params; // Get the user's ID from the route parameter
+    const file = req.files?.file; // Get the uploaded file from the request
+
+    if (!file) {
+      return res.status(400).json({
+        msg: "No file uploaded",
+        success: false,
+      });
+    }
+
+    // Generate a unique filename for Cloudinary
+    const originalFileName = file.name.split(".")[0].toLowerCase().replace(/[^a-z0-9]+/g, "-");
+    const timestamp = new Date().toISOString().replace(/[-:.]/g, "");
+    const uniqueFileName = `${originalFileName}-${timestamp}`;
+
+    // Upload to Cloudinary
+    const result = await new Promise((resolve, reject) => {
+      const uploadStream = cloudinary.uploader.upload_stream(
+        {
+          folder: "user-profile-pics",
+          public_id: uniqueFileName,
+          resource_type: "image",
+        },
+        (error, result) => {
+          if (error) reject(error);
+          else resolve(result);
+        }
+      );
+      uploadStream.end(file.data); // `file.data` contains the raw file data
+    });
+
+    // Update user's profile picture URL in MongoDB
+    const updatedUser = await User.findByIdAndUpdate(
+      id,
+      { profilePicture: result.secure_url },
+      { new: true }
+    ).select("-password");
+
+    return res.status(200).json({
+      msg: "Profile picture uploaded successfully",
+      success: true,
+      profilePicture: updatedUser.profilePicture,
+    });
+  } catch (error) {
+    console.log("Upload profile picture failed", error);
+    return res.status(500).json({
+      msg: "Upload profile picture failed",
+      success: false,
+    });
+  }
+};
+
 
 export const updateProfile = async (req, res) => {
   try {
