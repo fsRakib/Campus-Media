@@ -5,8 +5,8 @@ import cloudinary from "../config/cloudinary.js";
 
 export const uploadProfilePic = async (req, res) => {
   try {
-    const { id } = req.params; // Get the user's ID from the route parameter
-    const file = req.files?.file; // Get the uploaded file from the request
+    const { id } = req.params; 
+    const file = req.files?.file;
 
     if (!file) {
       return res.status(400).json({
@@ -24,16 +24,16 @@ export const uploadProfilePic = async (req, res) => {
     const result = await new Promise((resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(
         {
-          folder: "user-profile-pics",
+          folder: "next-cloudinary-uploads",
           public_id: uniqueFileName,
-          resource_type: "image",
+          resource_type: "auto",
         },
         (error, result) => {
           if (error) reject(error);
           else resolve(result);
         }
       );
-      uploadStream.end(file.data); // `file.data` contains the raw file data
+      uploadStream.end(file.data); 
     });
 
     // Update user's profile picture URL in MongoDB
@@ -89,7 +89,7 @@ export const updateProfile = async (req, res) => {
     });
   }
 };
-//=======================================================
+
 export const Register = async (req, res) => {
   try {
     const { name, username, email, password } = req.body;
