@@ -10,7 +10,8 @@ import {
   unfollow,
   updateProfile,
   updateUserBio,
-  uploadProfilePic
+  uploadProfilePic,
+  uploadCoverPhoto
 } from "../controllers/userController.js";
 import isAuthenticated from "../config/auth.js";
 import fileUpload from "express-fileupload";
@@ -30,5 +31,6 @@ router.route("/unfollow/:id").post(isAuthenticated, unfollow);
 router.route("/updateProfile/:id").put(isAuthenticated, updateProfile);
 router.route("/updateBio").put(isAuthenticated, updateUserBio);
 router.route("/uploadProfilePic/:id").post(uploadProfilePic);
+router.route("/uploadCoverPhoto/:id").post(uploadCoverPhoto);
 
 export default router;

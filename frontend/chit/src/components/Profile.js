@@ -23,6 +23,11 @@ export const Profile = () => {
   const handleProfilePicClick = () => {
     document.getElementById("fileInput").click();
   };
+  
+// Trigger file input on cover photo click
+const handleCoverPhotoClick = () => {
+  document.getElementById("coverFileInput").click();
+};
 
   // Upload new profile picture
   const handleFileChange = async (e) => {
@@ -54,7 +59,36 @@ export const Profile = () => {
       }
     }
   };
+// Upload new cover photo
+const handleCoverFileChange = async (e) => {
+  const file = e.target.files[0];
+  if (file) {
+    const formData = new FormData();
+    formData.append("file", file);
 
+    try {
+      const res = await axios.post(
+        `${USER_API_END_POINT}/uploadCoverPhoto/${user._id}`,
+        formData,
+        { headers: { "Content-Type": "multipart/form-data" } }
+      );
+
+      // Update the Redux state with the new cover photo URL
+      const updatedUser = {
+        ...user,
+        coverPhoto: res.data.coverPhoto,
+      };
+      dispatch(updateUser(updatedUser));
+      dispatch(updateProfile(updatedUser));
+
+      toast.success("Cover photo updated successfully!");
+    } catch (error) {
+      toast.error(
+        error.response?.data?.msg || "Failed to update cover photo"
+      );
+    }
+  }
+};
   const followAndUnfollowHandler = async () => {
     if (user.following.includes(id)) {
       //unfollow
@@ -158,10 +192,19 @@ export const Profile = () => {
             <p className="text-gray-500 text-sm">10 post</p>
           </div>
         </div>
-        <img
-          src="https://i.pinimg.com/originals/c1/5f/d1/c15fd13180df7eaa55aaa6960e7cc090.jpg"
-          alt="banner"
+         {/* Display Cover Photo */}
+         <img
+          src={profile?.coverPhoto || "https://i.pinimg.com/originals/c1/5f/d1/c15fd13180df7eaa55aaa6960e7cc090.jpg"}
+          alt="cover"
           style={{ width: "700px", height: "210px" }}
+          onClick={handleCoverPhotoClick} // Click to change cover photo
+          className="cursor-pointer"
+        />
+        <input
+          type="file"
+          id="coverFileInput"
+          onChange={handleCoverFileChange}
+          style={{ display: "none" }}
         />
         <div className="absolute top-52 ml-2 border-4 border-white rounded-full">
           <Avatar

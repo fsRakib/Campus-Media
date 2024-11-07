@@ -1,42 +1,61 @@
 import { User } from "../models/userSchema.js";
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
-import cloudinary from "../config/cloudinary.js";
+import { uploadFileToCloudinary } from "../config/uploadFile.js";
 
-export const uploadProfilePic = async (req, res) => {
+
+export const uploadCoverPhoto = async (req, res) => {
   try {
-    const { id } = req.params; 
+    const { id } = req.params;
     const file = req.files?.file;
 
     if (!file) {
-      return res.status(400).json({
-        msg: "No file uploaded",
-        success: false,
-      });
+      return res.status(400).json({ msg: "No file uploaded", success: false });
     }
 
-    // Generate a unique filename for Cloudinary
     const originalFileName = file.name.split(".")[0].toLowerCase().replace(/[^a-z0-9]+/g, "-");
-    const timestamp = new Date().toISOString().replace(/[-:.]/g, "");
-    const uniqueFileName = `${originalFileName}-${timestamp}`;
+    const result = await uploadFileToCloudinary(file.data, "next-cloudinary-uploads/cover-photos", originalFileName);
 
-    // Upload to Cloudinary
-    const result = await new Promise((resolve, reject) => {
-      const uploadStream = cloudinary.uploader.upload_stream(
-        {
-          folder: "next-cloudinary-uploads",
-          public_id: uniqueFileName,
-          resource_type: "auto",
-        },
-        (error, result) => {
-          if (error) reject(error);
-          else resolve(result);
-        }
-      );
-      uploadStream.end(file.data); 
+    const updatedUser = await User.findByIdAndUpdate(
+      id,
+      { coverPhoto: result.secure_url },
+      { new: true }
+    ).select("-password");
+
+    return res.status(200).json({
+      msg: "Cover photo uploaded successfully",
+      success: true,
+      coverPhoto: updatedUser.coverPhoto,
     });
+  } catch (error) {
+    console.error("Upload cover photo failed", error);
+    return res.status(500).json({
+      msg: "Upload cover photo failed",
+      success: false,
+    });
+  }
+};
 
-    // Update user's profile picture URL in MongoDB
+
+export const uploadProfilePic = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const file = req.files?.file;
+
+    if (!file) {
+      return res.status(400).json({ msg: "No file uploaded", success: false });
+    }
+
+    const originalFileName = file.name
+      .split(".")[0]
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-");
+    const result = await uploadFileToCloudinary(
+      file.data,
+      "next-cloudinary-uploads/profile-pics",
+      originalFileName
+    );
+
     const updatedUser = await User.findByIdAndUpdate(
       id,
       { profilePicture: result.secure_url },
@@ -49,14 +68,13 @@ export const uploadProfilePic = async (req, res) => {
       profilePicture: updatedUser.profilePicture,
     });
   } catch (error) {
-    console.log("Upload profile picture failed", error);
+    console.error("Upload profile picture failed", error);
     return res.status(500).json({
       msg: "Upload profile picture failed",
       success: false,
     });
   }
 };
-
 
 export const updateProfile = async (req, res) => {
   try {
@@ -174,7 +192,6 @@ export const logout = (req, res) => {
     success: true,
   });
 };
-
 
 // like- userId
 // book- chitId
