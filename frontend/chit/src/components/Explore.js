@@ -115,7 +115,7 @@ const Explore = () => {
     <div className="w-[50%] border-l border-r border-gray-200">
       <div
         className="w-full max-w-2xl bg-gray-200 rounded-lg shadow-lg p-4 flex flex-col justify-between"
-        style={{ height: "100vh", paddingRight: "1rem" }} // Added padding to the right
+        style={{ height: "100vh", paddingRight: "1rem" }}
       >
         <div className="flex-grow mb-4 overflow-y-auto pr-4">
           {" "}
@@ -138,7 +138,7 @@ const Explore = () => {
                       ? "bg-gray-300 text-black-900"
                       : "bg-green-300 text-gray-800"
                   }`}
-                  style={{ maxWidth: "75%" }} // Adjust the width here as needed
+                  style={{ maxWidth: "75%" }}
                   dangerouslySetInnerHTML={{ __html: chat.text }}
                 ></div>
               )}
