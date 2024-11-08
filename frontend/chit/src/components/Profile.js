@@ -196,11 +196,11 @@ export const Profile = () => {
         <img
           src={
             profile?.coverPhoto ||
-            "https://i.pinimg.com/originals/c1/5f/d1/c15fd13180df7eaa55aaa6960e7cc090.jpg"
+            "https://scontent.fdac146-1.fna.fbcdn.net/v/t1.6435-9/120173647_101691878372122_2748790512966999210_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=cc71e4&_nc_ohc=KtExtNMl5_8Q7kNvgGNxKpr&_nc_zt=23&_nc_ht=scontent.fdac146-1.fna&_nc_gid=AbAV6ClbxvvMR5nRaijR6uz&oh=00_AYDislIwPR__PjtNoqHkIfv0A4lRvR6mG9rv0X9sUjfMTA&oe=67552A43"
           }
           alt="cover"
           style={{ width: "700px", height: "210px" }}
-          onClick={handleCoverPhotoClick} // Click to change cover photo
+          onClick={handleCoverPhotoClick}
           className="cursor-pointer"
         />
         <input
@@ -211,10 +211,13 @@ export const Profile = () => {
         />
         <div className="absolute top-52 ml-2 border-4 border-white rounded-full">
           <Avatar
-            src={profile?.profilePicture || ""}
+            src={
+              profile?.profilePicture ||
+              "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg"
+            }
             size="120"
             round
-            onClick={handleProfilePicClick} // Click to change profile picture
+            onClick={handleProfilePicClick}
             className="cursor-pointer"
           />
           <input
@@ -246,7 +249,7 @@ export const Profile = () => {
           <p className="font-semibold">{`@${profile?.username}`}</p>
         </div>
         <div className="m-4 text-sm">
-          <p>{profile?.bio || "Add bio .."}</p>
+          <p className="text-lg">{profile?.bio || "Write you bio !..."}</p>
         </div>
 
         {profile?._id === user?._id && (
