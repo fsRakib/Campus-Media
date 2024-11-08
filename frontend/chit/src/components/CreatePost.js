@@ -104,7 +104,7 @@ export const CreatePost = () => {
             </div>
             <button
               onClick={submitHandler}
-              className="bg-[#39ff14] px-4 py-1 text-lg text-black border-none rounded-full"
+              className="bg-[#39ff14] border-2 border-black px-4 py-1 text-lg text-black rounded-full"
             >
               Post
             </button>

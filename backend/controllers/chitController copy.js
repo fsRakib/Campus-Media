@@ -31,6 +31,7 @@ export const createChit = async (req, res) => {
 };
 
 
+
 export const deleteChit = async (req, res) => {
   try {
     const { id } = req.params;

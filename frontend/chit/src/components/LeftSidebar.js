@@ -32,11 +32,11 @@ const LeftSidebar = () => {
 
   return (
     <div className="w-[20%]">
-      <div>
+      <div className="mt-2 ">
         <div>
           <img
             className="ml-5"
-            width={"44px"}
+            width={"80px"}
             src="https://previews.123rf.com/images/captainvector/captainvector1703/captainvector170309945/74377645-university-logo-element.jpg"
             alt="campus logo"
           />
@@ -93,7 +93,7 @@ const LeftSidebar = () => {
             </div>
             <h1 className="font-bold text-lg ml-2">Logout</h1>
           </div>
-          <button className="px-4 py-2 tracking-wider text-xl border-2 border-black text-md bg-[#39ff14] w-full rounded-full text-black font-bold">
+          <button className=" px-4 py-2 tracking-wider text-xl border-2 border-black text-md bg-[#39ff14] w-full rounded-full text-black font-bold">
             Post
           </button>
         </div>
