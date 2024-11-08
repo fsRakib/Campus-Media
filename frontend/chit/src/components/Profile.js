@@ -23,11 +23,11 @@ export const Profile = () => {
   const handleProfilePicClick = () => {
     document.getElementById("fileInput").click();
   };
-  
-// Trigger file input on cover photo click
-const handleCoverPhotoClick = () => {
-  document.getElementById("coverFileInput").click();
-};
+
+  // Trigger file input on cover photo click
+  const handleCoverPhotoClick = () => {
+    document.getElementById("coverFileInput").click();
+  };
 
   // Upload new profile picture
   const handleFileChange = async (e) => {
@@ -59,36 +59,36 @@ const handleCoverPhotoClick = () => {
       }
     }
   };
-// Upload new cover photo
-const handleCoverFileChange = async (e) => {
-  const file = e.target.files[0];
-  if (file) {
-    const formData = new FormData();
-    formData.append("file", file);
+  // Upload new cover photo
+  const handleCoverFileChange = async (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const formData = new FormData();
+      formData.append("file", file);
 
-    try {
-      const res = await axios.post(
-        `${USER_API_END_POINT}/uploadCoverPhoto/${user._id}`,
-        formData,
-        { headers: { "Content-Type": "multipart/form-data" } }
-      );
+      try {
+        const res = await axios.post(
+          `${USER_API_END_POINT}/uploadCoverPhoto/${user._id}`,
+          formData,
+          { headers: { "Content-Type": "multipart/form-data" } }
+        );
 
-      // Update the Redux state with the new cover photo URL
-      const updatedUser = {
-        ...user,
-        coverPhoto: res.data.coverPhoto,
-      };
-      dispatch(updateUser(updatedUser));
-      dispatch(updateProfile(updatedUser));
+        // Update the Redux state with the new cover photo URL
+        const updatedUser = {
+          ...user,
+          coverPhoto: res.data.coverPhoto,
+        };
+        dispatch(updateUser(updatedUser));
+        dispatch(updateProfile(updatedUser));
 
-      toast.success("Cover photo updated successfully!");
-    } catch (error) {
-      toast.error(
-        error.response?.data?.msg || "Failed to update cover photo"
-      );
+        toast.success("Cover photo updated successfully!");
+      } catch (error) {
+        toast.error(
+          error.response?.data?.msg || "Failed to update cover photo"
+        );
+      }
     }
-  }
-};
+  };
   const followAndUnfollowHandler = async () => {
     if (user.following.includes(id)) {
       //unfollow
@@ -192,9 +192,12 @@ const handleCoverFileChange = async (e) => {
             <p className="text-gray-500 text-sm">10 post</p>
           </div>
         </div>
-         {/* Display Cover Photo */}
-         <img
-          src={profile?.coverPhoto || "https://i.pinimg.com/originals/c1/5f/d1/c15fd13180df7eaa55aaa6960e7cc090.jpg"}
+        {/* Display Cover Photo */}
+        <img
+          src={
+            profile?.coverPhoto ||
+            "https://i.pinimg.com/originals/c1/5f/d1/c15fd13180df7eaa55aaa6960e7cc090.jpg"
+          }
           alt="cover"
           style={{ width: "700px", height: "210px" }}
           onClick={handleCoverPhotoClick} // Click to change cover photo
