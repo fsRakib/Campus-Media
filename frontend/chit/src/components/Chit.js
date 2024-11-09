@@ -83,7 +83,7 @@ export const Chit = ({ chit }) => {
             <div>
               <p>{chit?.description}</p>
             </div>
-            {chit?.imageUrl && ( // Display image if imageUrl exists
+            {chit?.imageUrl && ( 
               <div className="mt-2">
                 <img
                   src={chit.imageUrl}
@@ -115,7 +115,7 @@ export const Chit = ({ chit }) => {
                 <div className="p-2 hover:bg-green-200 rounded-full cursor-pointer">
                   <MdOutlineBookmarks size="24px" />
                 </div>
-                <p>{user?.bookmarks?.length}</p>
+                {/* <p>{user?.bookmarks?.length}</p> */}
               </div>
               {user?._id === chit?.userId && (
                 <div
