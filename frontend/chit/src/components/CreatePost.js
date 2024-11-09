@@ -9,31 +9,56 @@ import { getIsActive, getRefresh } from "../redux/chitSlice";
 
 export const CreatePost = () => {
   const [description, setDescription] = useState("");
+  const [image, setImage] = useState(null); // Image file state
+  const [previewUrl, setPreviewUrl] = useState(""); // Image preview URL
+  const [isModalOpen, setIsModalOpen] = useState(false); // Modal visibility state
+  const [loading, setLoading] = useState(false);
   const { user } = useSelector((store) => store.user);
   const { isActive } = useSelector((store) => store.chit);
   const dispatch = useDispatch();
 
   const submitHandler = async () => {
+    setLoading(true);
+    const formData = new FormData();
+    formData.append("description", description);
+    formData.append("id", user?._id);
+    if (image) {
+      formData.append("image", image);
+    }
+
     try {
-      const res = await axios.post(
-        `${CHIT_API_END_POINT}/create`,
-        { description, id: user?._id },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          withCredentials: true,
-        }
-      );
+      const res = await axios.post(`${CHIT_API_END_POINT}/create`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        withCredentials: true,
+      });
       dispatch(getRefresh());
       if (res.data.success) {
         toast.success(res.data.msg);
       }
     } catch (error) {
-      toast.error(error.response.data.msg);
+      toast.error(error.response?.data?.msg || "Error creating post");
       console.log(error);
     }
+    setLoading(false);
     setDescription("");
+    setImage(null);
+    setPreviewUrl("");
+    setIsModalOpen(false);
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImage(file);
+      setPreviewUrl(URL.createObjectURL(file));
+      setIsModalOpen(true);
+    }
+  };
+
+  const confirmImage = () => {
+    setIsModalOpen(false);
   };
 
   const forYouHandler = () => {
@@ -47,6 +72,7 @@ export const CreatePost = () => {
   return (
     <div className="w-[100%]">
       <div>
+        {/* Tab Selector */}
         <div className="flex items-center justify-evenly border-b border-gray-200">
           <div
             onClick={forYouHandler}
@@ -81,35 +107,78 @@ export const CreatePost = () => {
             </h1>
           </div>
         </div>
-        <div>
-          <div className="flex items-center p-4">
-            <div>
-              <Avatar
-               src={user?.profilePicture || "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg"}
-                size="40"
-                round={true}
-              />
-            </div>
+
+        {/* Post Input */}
+        <div className="flex items-center p-4">
+          <Avatar
+            src={
+              user?.profilePicture ||
+              "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg"
+            }
+            size="40"
+            round={true}
+          />
+          <input
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            className="w-full outline-none ml-2 border-none text-xl"
+            type="text"
+            placeholder="What's going on?"
+          />
+        </div>
+
+        {/* Image Selection and Post Button */}
+        <div className="flex items-center justify-between p-4 border-b border-gray-300">
+          <div onClick={() => document.getElementById("imageInput").click()}>
+            <FaImages size="24px" />
             <input
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              className="w-full outline-none ml-2 border-none text-xl"
-              type="text"
-              placeholder="Whats going !..."
+              id="imageInput"
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+              style={{ display: "none" }}
             />
           </div>
-          <div className="flex items-center justify-between p-4 border-b border-gray-300">
-            <div>
-              <FaImages size="24px" />
-            </div>
-            <button
-              onClick={submitHandler}
-              className="bg-[#39ff14] border-2 border-black px-4 py-1 text-lg text-black rounded-full"
-            >
-              Post
-            </button>
-          </div>
+          <button
+            onClick={submitHandler}
+            className="bg-[#39ff14] border-2 font-semibold tracking-wide border-black px-4 py-1 text-lg text-black rounded-full"
+            disabled={loading} 
+          >
+            {loading ? "Posting..." : "Post"}
+          </button>
         </div>
+
+        {/* Image Preview Modal */}
+        {isModalOpen && (
+          <div className="z-10 fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
+            <div className="bg-white p-4 rounded-md shadow-lg w-11/12 max-w-md">
+              <h2 className="text-center text-xl font-bold mb-4">
+                Image Preview
+              </h2>
+              <div className="flex justify-center">
+                <img
+                  src={previewUrl}
+                  alt="Preview"
+                  className="max-w-full max-h-96 object-contain mb-4"
+                />
+              </div>
+              <div className="flex justify-end gap-4">
+                <button
+                  onClick={() => setIsModalOpen(false)}
+                  className="text-red-500"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={confirmImage}
+                  className="bg-[#39ff14] px-4 py-2 rounded text-black"
+                >
+                  Confirm
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

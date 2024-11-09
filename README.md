@@ -11,4 +11,4 @@ This is my university academic project.
 - User can create post
 - Follow or Unfollow to others
 - Visit registered profile
-- AI power chat using Geminiu API
+- AI power chat using Gemini API

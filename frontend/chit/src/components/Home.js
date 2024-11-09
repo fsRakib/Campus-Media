@@ -25,6 +25,7 @@ const Home = () => {
       <Outlet />
       <RightSidebar otherUsers={otherUsers} />
     </div>
+   
   );
 };
 

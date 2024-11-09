@@ -31,7 +31,7 @@ const LeftSidebar = () => {
   };
 
   return (
-    <div className="w-[20%]">
+    <div className="w-[20%] sticky top-0 self-start">
       <div className="mt-2 ">
         <div>
           <img

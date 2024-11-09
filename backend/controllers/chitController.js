@@ -2,34 +2,73 @@ import { Chit } from "../models/chitSchema.js";
 import { User } from "../models/userSchema.js";
 import { uploadFileToCloudinary } from "../config/uploadFile.js";
 
+// export const createChit = async (req, res) => {
+//   try {
+//     const { description, id } = req.body;
+//     if (!description || !id) {
+//       return res.status(401).json({
+//         msg: "Please enter all fields",
+//         success: false,
+//       });
+//     }
+//     console.log("Request Body:", req.body);
+//     console.log("ID= ", id);
+
+//     const user = await User.findById(id).select("-password");
+//     await Chit.create({
+//       description,
+//       userId: id,
+//       userDetails: user,
+//     });
+
+//     return res.status(201).json({
+//       msg: "Chit created successfully",
+//       success: true,
+//     });
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
+
 export const createChit = async (req, res) => {
   try {
     const { description, id } = req.body;
+    const { file } = req;
+
     if (!description || !id) {
-      return res.status(401).json({
+      return res.status(400).json({
         msg: "Please enter all fields",
         success: false,
       });
     }
-    console.log("Request Body:", req.body);
-    console.log("ID= ", id);
 
     const user = await User.findById(id).select("-password");
-    await Chit.create({
+
+    // Upload image to Cloudinary if provided
+    let imageUrl = "";
+    if (file) {
+      const result = await uploadFileToCloudinary(file.buffer, "chits", file.originalname);
+      imageUrl = result.secure_url;
+    }
+
+    // Create the Chit with text and image URL
+    const newChit = await Chit.create({
       description,
       userId: id,
       userDetails: user,
+      imageUrl,
     });
 
     return res.status(201).json({
       msg: "Chit created successfully",
       success: true,
+      chit: newChit,
     });
   } catch (error) {
     console.log(error);
+    return res.status(500).json({ msg: "Server error", success: false });
   }
 };
-
 
 export const deleteChit = async (req, res) => {
   try {
