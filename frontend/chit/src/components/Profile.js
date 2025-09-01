@@ -8,7 +8,6 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { USER_API_END_POINT } from "../utils/constant";
 import { followingUpdate, updateUser, updateProfile } from "../redux/userSlice";
-import { getRefresh } from "../redux/chitSlice";
 
 export const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);

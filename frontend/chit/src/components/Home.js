@@ -13,7 +13,7 @@ const Home = () => {
     if (!user) {
       navigate("/login");
     }
-  }, []);
+  }, [navigate, user]);
 
   //custom Hook
   useOtherUser(user?._id);
@@ -25,7 +25,6 @@ const Home = () => {
       <Outlet />
       <RightSidebar otherUsers={otherUsers} />
     </div>
-   
   );
 };
 

@@ -10,7 +10,8 @@
     }
   ],
   "env": {
-    "REACT_APP_BACKEND_URL": "https://campus-media-backend.vercel.app"
+    "REACT_APP_BACKEND_URL": "https://campus-media-backend.vercel.app",
+    "CI": "false"
   },
   "routes": [
     {
