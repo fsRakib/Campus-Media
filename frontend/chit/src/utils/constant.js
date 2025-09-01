@@ -1,5 +1,7 @@
 // Update this URL with your deployed backend URL
-const BACKEND_URL = "https://campus-media-backend.vercel.app/";
+const BACKEND_URL =
+  process.env.REACT_APP_BACKEND_URL ||
+  "https://campus-media-backend.vercel.app/";
 
 export const USER_API_END_POINT = `${BACKEND_URL}/api/v1/user`;
 
