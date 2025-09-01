@@ -1,6 +1,9 @@
-export const USER_API_END_POINT = "http://localhost:8888/api/v1/user";
+// Update this URL with your deployed backend URL
+const BACKEND_URL = "https://campus-media-backend.vercel.app/";
 
-export const CHIT_API_END_POINT = "http://localhost:8888/api/v1/chit";
+export const USER_API_END_POINT = `${BACKEND_URL}/api/v1/user`;
+
+export const CHIT_API_END_POINT = `${BACKEND_URL}/api/v1/chit`;
 
 export const timeSince = (timestamp) => {
   let time = Date.parse(timestamp);
